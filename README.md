@@ -155,14 +155,6 @@ the fine-tuned model.
 
 ## Evaluation Report
 
-### Overall Accuracy
-
-| Model | Accuracy |
-|---|---|
-| Groq Zero-Shot Baseline | **XX.X%** ← replace after running Colab |
-| DistilBERT Fine-Tuned | **XX.X%** ← replace after running Colab |
-| Improvement | **+XX.X pp** ← replace after running Colab |
-
 ### Per-Class Metrics — Fine-Tuned Model
 
 Per-class Report:
