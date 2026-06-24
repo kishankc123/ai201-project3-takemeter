@@ -165,21 +165,35 @@ the fine-tuned model.
 
 ### Per-Class Metrics — Fine-Tuned Model
 
-| Label | Precision | Recall | F1 |
-|---|---|---|---|
-| `analysis` | X.XX | X.XX | X.XX |
-| `hot_take` | X.XX | X.XX | X.XX |
-| `reaction` | X.XX | X.XX | X.XX |
-| **macro avg** | X.XX | X.XX | X.XX |
+Per-class Report:
+              precision    recall  f1-score   support
+
+    analysis       0.75      0.90      0.82        10
+    hot_take       0.88      0.70      0.78        10
+    reaction       0.91      0.91      0.91        11
+
+    accuracy                           0.84        31
+   macro avg       0.84      0.84      0.84        31
+weighted avg       0.85      0.84      0.84        31
 
 ### Per-Class Metrics — Groq Baseline
 
-| Label | Precision | Recall | F1 |
-|---|---|---|---|
-| `analysis` | X.XX | X.XX | X.XX |
-| `hot_take` | X.XX | X.XX | X.XX |
-| `reaction` | X.XX | X.XX | X.XX |
-| **macro avg** | X.XX | X.XX | X.XX |
+==================================================
+GROQ ZERO-SHOT BASELINE — Test Set Results
+==================================================
+Overall Accuracy: 0.9032 (90.3%)
+Unparseable responses: 0
+
+Per-class Report:
+              precision    recall  f1-score   support
+
+    analysis       1.00      0.80      0.89        10
+    hot_take       0.77      1.00      0.87        10
+    reaction       1.00      0.91      0.95        11
+
+    accuracy                           0.90        31
+   macro avg       0.92      0.90      0.90        31
+weighted avg       0.93      0.90      0.91        31
 
 ### Confusion Matrix — Fine-Tuned Model
 
@@ -187,59 +201,37 @@ the fine-tuned model.
 
 |  | Predicted: analysis | Predicted: hot_take | Predicted: reaction |
 |---|---|---|---|
-| **True: analysis** | X | X | X |
-| **True: hot_take** | X | X | X |
-| **True: reaction** | X | X | X |
+<img width="900" height="882" alt="image" src="https://github.com/user-attachments/assets/68cef4ac-397b-4612-a913-8e64c2e241ea" />
+
 
 The diagonal shows correct predictions. Off-diagonal cells show which boundaries
 the model struggles with. The largest off-diagonal cell is expected to be
 hot_take → reaction (or vice versa), as these two labels share emotional language
 and are the hardest boundary in the taxonomy.
 
----
-
-### Three Wrong Predictions — Analysis
-
-*Replace with your actual wrong predictions from evaluation_results.json*
-
-**Wrong prediction 1:**
-- **Text:** "[paste actual wrong example here]"
-- **True label:** hot_take | **Predicted:** reaction | **Confidence:** X.XX
-- **Analysis:** This post reacted to a specific game but included a generalizing
-  claim. The model likely keyed on the emotional language and short length to
-  predict `reaction`, missing the generalizing claim that makes it `hot_take`.
-  This reveals the model has learned surface features (caps, exclamation marks,
-  emoji) as `reaction` signals rather than the semantic content of the claim.
-
-**Wrong prediction 2:**
-- **Text:** "[paste actual wrong example here]"
-- **True label:** analysis | **Predicted:** hot_take | **Confidence:** X.XX
-- **Analysis:** This post cited statistics but used assertive opinion framing.
-  The model likely weighted the confident tone over the actual evidence content.
-  This suggests the model has partially learned tone as a proxy for label, which
-  breaks down when analytical posts use strong language.
-
-**Wrong prediction 3:**
-- **Text:** "[paste actual wrong example here]"
-- **True label:** reaction | **Predicted:** hot_take | **Confidence:** X.XX
-- **Analysis:** This was a short post without emoji or obvious emotional markers.
-  The model struggles with calm, low-energy reactions — its `reaction` signal
-  appears to depend heavily on exclamations and emoji rather than the
-  event-specificity of the claim.
 
 ---
 
 ### Sample Classifications
 
-*Replace with actual outputs from Section 6 of the Colab notebook*
+=======================================================
+SAMPLE CLASSIFICATIONS (Fine-Tuned Model)
+=======================================================
 
-| Post (truncated) | True Label | Predicted | Confidence | Correct? |
-|---|---|---|---|---|
-| "Jokic's PER of 31.1 is the highest ever recorded..." | analysis | analysis | X.XX% | ✅ |
-| "LeBron is the GOAT and it's not even close..." | hot_take | hot_take | X.XX% | ✅ |
-| "CURRY JUST HIT THAT FROM HALF COURT NO WAY 😭" | reaction | reaction | X.XX% | ✅ |
-| "[wrong example from above]" | hot_take | reaction | X.XX% | ❌ |
-| "[another example]" | analysis | analysis | X.XX% | ✅ |
+❌ True: hot_take   Predicted: analysis   Confidence: 39.00%
+   Text: The entire Eastern Conference is fraudulent this year. Any team from the West would win the East by ...
+
+✅ True: hot_take   Predicted: hot_take   Confidence: 41.57%
+   Text: Whoever is running the Wizards front office should never work in basketball again. The decision maki...
+
+✅ True: hot_take   Predicted: hot_take   Confidence: 38.93%
+   Text: Embiid will never win a championship. Too injury prone, too soft mentally. Great player but not a wi...
+
+❌ True: analysis   Predicted: reaction   Confidence: 39.65%
+   Text: San Antonio is doing everything right in the rebuild. They are not rushing Wembanyama, developing th...
+
+✅ True: reaction   Predicted: reaction   Confidence: 48.69%
+   Text: That crossover should be illegal. The defender's ankles are somewhere in the parking lot right now....
 
 **Why the first prediction is reasonable:** The `analysis` prediction on the Jokic
 post is correct because the post contains a specific, verifiable statistic (PER 31.1),
@@ -268,22 +260,6 @@ other labels. The decision rules in the taxonomy require understanding *intent a
 argument structure*, which is beyond what 140 training examples of DistilBERT
 can reliably capture.
 
----
-
-### Error Pattern Analysis (Stretch Feature)
-
-*To be completed after running the notebook. Process:*
-1. Export all wrong predictions from `evaluation_results.json`
-2. Paste into Claude with prompt: "Identify any systematic patterns in these
-   misclassified examples — post length, sarcasm, label pairs, topic type"
-3. Verify patterns manually by re-reading the examples
-4. Report confirmed patterns below
-
-**Anticipated patterns based on label design:**
-- Most errors will cluster at the `hot_take` ↔ `reaction` boundary
-- Short posts (under 15 words) will be misclassified at higher rates
-- Posts without emoji or caps that are reactions will be mislabeled as `hot_take`
-- Posts with one stat that are `hot_take` will sometimes be mislabeled as `analysis`
 
 ---
 
@@ -302,31 +278,6 @@ scraping setup; the disadvantage is that the model may not generalize as well to
 real posts, which have more linguistic diversity, spelling errors, and
 community-specific slang than the clean synthetic examples.
 
----
-
-## AI Usage
-
-**Instance 1 — Label stress-testing:**
-Prompted Claude with the full label definitions and asked it to generate 15 posts
-that sit at the boundary between `hot_take` and `reaction`. It produced several
-posts that were genuinely ambiguous under the original definitions. This forced a
-revision of the decision rule to explicitly require that a `hot_take` make a claim
-that "generalizes beyond the event" — a distinction that was implied but not stated
-in the first draft. Three of the generated boundary posts were added to the
-annotation examples in planning.md.
-
-**Instance 2 — Dataset generation:**
-Prompted Claude to generate 201 realistic r/nba posts balanced across the three
-labels, using the label definitions and community context from planning.md. The
-initial output was reviewed post-by-post and 12 examples were corrected — mostly
-`hot_take` posts that had slipped into `analysis` territory by including one
-specific stat. The corrected label was noted in the `notes` column.
-
-**Instance 3 — Failure analysis (planned):**
-After running the notebook, wrong predictions from `evaluation_results.json` will
-be pasted into Claude with a prompt to identify systematic error patterns. Any
-patterns identified will be manually verified before inclusion in the evaluation
-report above.
 
 ---
 
