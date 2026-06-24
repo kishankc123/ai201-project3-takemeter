@@ -1,0 +1,134 @@
+{
+  "baseline": {
+    "model": "llama-3.3-70b-versatile (zero-shot)",
+    "accuracy": 0.9032,
+    "per_class": {
+      "analysis": {
+        "precision": 1.0,
+        "recall": 0.8,
+        "f1": 0.8889
+      },
+      "hot_take": {
+        "precision": 0.7692,
+        "recall": 1.0,
+        "f1": 0.8696
+      },
+      "reaction": {
+        "precision": 1.0,
+        "recall": 0.9091,
+        "f1": 0.9524
+      }
+    },
+    "macro_f1": 0.9036
+  },
+  "finetuned": {
+    "model": "distilbert-base-uncased (fine-tuned)",
+    "accuracy": 0.8387,
+    "per_class": {
+      "analysis": {
+        "precision": 0.75,
+        "recall": 0.9,
+        "f1": 0.8182
+      },
+      "hot_take": {
+        "precision": 0.875,
+        "recall": 0.7,
+        "f1": 0.7778
+      },
+      "reaction": {
+        "precision": 0.9091,
+        "recall": 0.9091,
+        "f1": 0.9091
+      }
+    },
+    "macro_f1": 0.835,
+    "confusion_matrix": {
+      "labels": [
+        "analysis",
+        "hot_take",
+        "reaction"
+      ],
+      "matrix": [
+        [
+          9,
+          0,
+          1
+        ],
+        [
+          3,
+          7,
+          0
+        ],
+        [
+          0,
+          1,
+          10
+        ]
+      ]
+    }
+  },
+  "wrong_predictions": [
+    {
+      "text": "The entire Eastern Conference is fraudulent this year. Any team from the West would win the East by ten games. Complete joke.",
+      "true": "hot_take",
+      "predicted": "analysis",
+      "confidence": 0.39
+    },
+    {
+      "text": "San Antonio is doing everything right in the rebuild. They are not rushing Wembanyama, developing the supporting cast around him, and staying patient with the process.",
+      "true": "analysis",
+      "predicted": "reaction",
+      "confidence": 0.3965
+    },
+    {
+      "text": "The standing ovation he got in every arena on his retirement tour this season. Even rival fans stood. That is the mark of a true legend.",
+      "true": "reaction",
+      "predicted": "hot_take",
+      "confidence": 0.3748
+    },
+    {
+      "text": "The draft is completely unpredictable and anyone who claims otherwise is selling something. Half the top five picks over the last decade have been busts.",
+      "true": "hot_take",
+      "predicted": "analysis",
+      "confidence": 0.404
+    },
+    {
+      "text": "Tyrese Haliburton is the most underrated point guard in the league. His hockey assist numbers are the best in the NBA and traditional stats do not capture half of what he contributes.",
+      "true": "hot_take",
+      "predicted": "analysis",
+      "confidence": 0.4135
+    }
+  ],
+  "sample_classifications": [
+    {
+      "text": "The entire Eastern Conference is fraudulent this year. Any team from the West would win the East by ten games. Complete joke.",
+      "true": "hot_take",
+      "predicted": "analysis",
+      "confidence": 0.39
+    },
+    {
+      "text": "Whoever is running the Wizards front office should never work in basketball again. The decision making has been criminally bad for a decade.",
+      "true": "hot_take",
+      "predicted": "hot_take",
+      "confidence": 0.4157
+    },
+    {
+      "text": "Embiid will never win a championship. Too injury prone, too soft mentally. Great player but not a winner.",
+      "true": "hot_take",
+      "predicted": "hot_take",
+      "confidence": 0.3893
+    },
+    {
+      "text": "San Antonio is doing everything right in the rebuild. They are not rushing Wembanyama, developing the supporting cast around him, and staying patient with the process.",
+      "true": "analysis",
+      "predicted": "reaction",
+      "confidence": 0.3965
+    },
+    {
+      "text": "That crossover should be illegal. The defender's ankles are somewhere in the parking lot right now.",
+      "true": "reaction",
+      "predicted": "reaction",
+      "confidence": 0.4869
+    }
+  ]
+}
